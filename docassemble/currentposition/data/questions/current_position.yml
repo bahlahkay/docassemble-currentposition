@@ -1,0 +1,89 @@
+metadata:
+  title: Current Position
+  short title: CurPos
+---
+modules:
+ - docassemble.base.util
+---
+sections:
+  - intro: Introduction
+  - personaldeets: Personal Details
+  - assets: Assets
+  - liabilities: Liabilities
+  - cashflow: Income and Expenses
+  - goals: What you want to achieve
+  - summary: Summary and Confirmation
+  - conclusion: Putting it all together!
+---
+features:
+  navigation: True
+---
+mandatory: True
+question: | 
+  Welcome to the DocDocGoose Current Financial Position (CurPos) Tool!
+  [FILE LogoDocDocGoose.png, 100%]
+subquestion: |
+  This is a guided interview to collect information about your personal position and give you a summary so you can go out and get great finanical advice.
+ 
+field: intro_field
+section: intro
+---
+mandatory: True
+question: |
+  Et voila! Current position summary is ready!
+subquestion: |
+  Hope you have a great day!
+buttons:
+  - Exit: exit
+  - Restart: restart
+attachments:
+  - name: Current Position Summary
+    filename: Current_Position_Summary
+    docx template file: Cashflow1.docx
+section: conclusion
+---
+question: |
+  What is your cost of living
+subquestion: |
+  Include only your general living expenses and expenses to maintain your home.
+  Do not include loan repayments, deductible or businesses expenses, school fees, or expenses related to individual investments
+fields:
+  - 'Cost of Living': col
+    datatype: currency
+section: cashflow
+---
+code: |
+  net_cashflow = taxable_income - col - tax_payable
+---
+code: |
+  if taxable_income <=18200:
+    tax_payable =0
+  elif taxable_income <=37000:
+    tax_payable = (taxable_income -18200)*0.19
+  elif taxable_income <=87000:
+    tax_payable = 3572 + ((taxable_income-37000)*0.325)
+  elif taxable_income<=180000:
+    tax_payable = 20797 + ((taxable_income-90000)*0.37)
+  elif taxable_income>180000:
+    tax_payable = 54097 + ((taxable_income-180000)*0.45)
+---
+question: |
+  Taxable Income
+subquestion: |
+  Please enter your taxable income here
+fields:
+  - 'Taxable Income': taxable_income
+    datatype: currency
+section: cashflow
+---
+question: |
+  what you want to achieve
+subquestion: |
+  Our goals are often determined by our stage of life. How would you describe yourself?
+field: goal_cat
+choices:
+  - Young to mid-life
+  - Mid-life
+  - Pre-retirement
+  - Retirement
+section: goals
